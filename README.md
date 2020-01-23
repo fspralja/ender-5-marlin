@@ -15,12 +15,14 @@ it's a drop in replacement files for Marlin's firmware https://github.com/Marlin
 * Disabled Bootscreen (reclaim memory space)
 * Disabled Status Screen Image (this remove "Ender-5" from the top left corner, for much cleaner status screen)
 * Enabled S-Curve Acceleration & Junction Deviation @ 0.08 for 0.04mm nozzle (You'll need to change the value if you're using different nozzle)
+* Changed DEFAULT_ZJERK to 0.4 (should produce more accurate outerlines)
 * Linear Advance Supported. To make the use of Linear Advance, you will need to do the calibration, then add M900 K## to Slicer's Custom Starting G-Code.
 * Disabled Speaker
 * Disabled ARC Support (It's for laser etching, reclaim memory space)
 * Boosted Buffer for improved print quality with Octopi, almost as good as printing from SD Card
 * Enabled Unknown Z No Raise (No more horrible grinding sound at Max Position. However, disable this if you use Auto Bed Leveling)
 * Set print bed to 220x220 with the volume of 300 (you can change it to 235x235 however, keep in mind if you have custom hotend cooling or Auto Leveling sensors it'll crash into frame unless you reduced it to 220x220 or less)
+* Enabled PROBE_MANUALLY
 * Enabled Mesh Bed Leveling with 5x5 points (I'm old school, you can disable if don't want it)
   ```
   #define MESH_BED_LEVELING
@@ -40,7 +42,13 @@ Special Note about LCD stuffs below, I disabled a lot of those to reclaim memory
     * [Detailed Progress](https://plugins.octoprint.org/plugins/detailedprogress/)
     * [PrintTimeGenius](https://plugins.octoprint.org/plugins/PrintTimeGenius/)
     * [OctoPrint-ProgressBasedOnTime](https://plugins.octoprint.org/plugins/ProgressBasedOnTime/)
-    
+
+* Enabled Filament Change (while printing)
+  ```
+  #define NOZZLE_PARK_FEATURE
+  #define ADVANCED_PAUSE_FEATURE
+  ```
+
 ## Slicer G-Code
 
 Start G-Code
@@ -70,11 +78,20 @@ M140 S0 ; turn off bed
 M84 ; disable motors
 ```
 
+## Notes on compilation
+To get the additional features compiled, you need to set some extra compiler flags within your Arduiono build environment:
+
+%APPDATA%\Local\Arduino15\packages\Sanguino\hardware\avr\1.0.3\platform.local.txt
+```
+compiler.c.extra_flags=-fno-tree-scev-cprop -fno-split-wide-types -Wl,--relax -mcall-prologues
+compiler.cpp.extra_flags=-fno-tree-scev-cprop -fno-split-wide-types -Wl,--relax -mcall-prologues
+compiler.c.elf.extra_flags=-Wl,--relax
+```
 
 ## Future Plan
 
-Create different set of configuration.h for: 
+Create different set of configuration.h for:
 - [x] Mesh Leveling
 - [ ] ~~EZABL Leveling~~ **Please use [TH3D's firmware](https://www.th3dstudio.com/knowledgebase/th3d-unified-firmware-package/)**
 - [ ] ~~BLTouch Leveling~~ **Dropped, due to variation of BLtouch/3Dtouch Clones**
-- [ ] Create guide on how to edit your firmware for Bltouch/3Dtouch 
+- [ ] Create guide on how to edit your firmware for Bltouch/3Dtouch
