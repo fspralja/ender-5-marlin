@@ -22,7 +22,7 @@ it's a drop in replacement files for Marlin's firmware https://github.com/Marlin
 * Boosted Buffer for improved print quality with Octopi, almost as good as printing from SD Card
 * Enabled Unknown Z No Raise (No more horrible grinding sound at Max Position. However, disable this if you use Auto Bed Leveling)
 * Set print bed to 220x220 with the volume of 300 (you can change it to 235x235 however, keep in mind if you have custom hotend cooling or Auto Leveling sensors it'll crash into frame unless you reduced it to 220x220 or less)
-* Enabled PROBE_MANUALLY
+* ~~Enabled PROBE_MANUALLY~~
 * Enabled Mesh Bed Leveling with 5x5 points (I'm old school, you can disable if don't want it)
   ```
   #define MESH_BED_LEVELING
@@ -53,6 +53,7 @@ Special Note about LCD stuffs below, I disabled a lot of those to reclaim memory
 
 Start G-Code
 ```
+M420 S ; this will load your manual bed leveling mesh from EEPROM
 G28 ; home all axes
 M117 Purge extruder
 G92 E0 ; reset extruder
